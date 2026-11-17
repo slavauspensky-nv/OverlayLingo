@@ -25,15 +25,15 @@
 
 - **Google without an API key** — two public endpoints plus MyMemory as a fallback if one of them fails.
 - **DeepL** with a personal API key (both free and pro keys are supported).
-- **Automatic language detection** — EN→RU or RU→EN is decided from the text; the settings window has a "Check connection" button.
+- **Any source language, detected automatically** — Google is called with `sl=auto` and DeepL detects the source itself, so the text can be in any language those services know (Spanish, German, French, Japanese, Chinese, and so on); the result comes out in Russian or English, picked from the script of the text. The settings window has a "Check connection" button.
 - **LRU cache of 2000 phrases** with least-recently-used eviction: repeated phrases come back instantly.
 - **One request in flight** and a 7-second timeout, so the UI never freezes on a slow network.
 
 ### Screen capture translation
 
 - **Ctrl + Alt + S** — select a screen region, WordPeek recognizes the text and translates it.
-- **OCR runs locally** through `Windows.Media.Ocr` (`ocr.ps1`), languages `en-US` and `ru`; the image is never uploaded anywhere.
-- **Screenshot language** — automatic or explicit (English / Russian).
+- **OCR runs locally** through `Windows.Media.Ocr` (`ocr.ps1`) — the image never leaves the machine. The `en-US` and `ru` language packs are used; other writing systems need the matching OCR pack installed in Windows (Settings → Time & language).
+- **Any language on the screen** — the recognized text goes through the same auto-detect pipeline, so a Spanish, German or French page comes out in Russian or English. The "Screenshot language" setting only forces the recognition language for a tricky screenshot.
 - In the result window: **click a word for a reverse translation**, **double-click to save the pair to your notebook**, `Esc` to close; the window collapses to its title bar and resizes from the edges.
 
 ### Look and sound
@@ -109,6 +109,8 @@ The executable is `bin\Release\net8.0-windows\WordPeek.exe`; it needs `WordPeek.
 - Terminals, consoles and Java applications do not expose text through UIA.
 - For Chromium apps the caret coordinates are unavailable, so the overlay appears next to the mouse cursor.
 - Google without a key may throttle requests; for steady use, a DeepL key is the better option.
+- The MyMemory fallback only handles RU/EN pairs — other source languages rely on Google or DeepL.
+- Only the target is fixed to Russian or English; OCR reads the languages whose Windows packs are installed.
 
 ## Diagnostics
 
