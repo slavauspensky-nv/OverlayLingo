@@ -1,4 +1,4 @@
-# OverlayLingo
+﻿# OverlayLingo
 
 <p><img src="icon-preview.png" width="88" height="88" alt="OverlayLingo icon" align="left" hspace="12"></p>
 
@@ -81,7 +81,7 @@
 
 ## Installation
 
-1. Download `OverlayLingo-1.0.0-win-x64.zip` from [Releases](../../releases) and unpack it into any folder.
+1. Download `OverlayLingo-1.0.1-win-x64.zip` from [Releases](../../releases) and unpack it into any folder.
 2. Run `OverlayLingo.exe` — the app lives in the tray and opens no windows.
 3. Requires [.NET Desktop Runtime 8 (x64)](https://dotnet.microsoft.com/download/dotnet/8.0).
 
