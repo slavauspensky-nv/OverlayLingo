@@ -97,3 +97,33 @@ accessibility: request=True
 не включится. Тогда работает перехват клавиатуры либо ручное включение через
 `chrome://accessibility` → «Native accessibility API support» для нужной вкладки.
 
+## Сборка из исходников
+
+Нужен Windows 10/11 x64 и .NET SDK 8.0 (проект — WPF + WinForms, `net8.0-windows`).
+
+```powershell
+git clone https://github.com/slavauspensky-nv/WordPeek.git
+cd WordPeek
+dotnet build -c Release
+```
+
+Готовый файл — `bin\Release\net8.0-windows\WordPeek.exe`; рядом должны лежать
+`WordPeek.dll`, `WordPeek.runtimeconfig.json`, `WordPeek.deps.json`, папки `fonts\` и `sounds\`.
+Для запуска нужен .NET Desktop Runtime 8.
+
+## Шрифты
+
+В `fonts/` лежат 25 шрифтов с Google Fonts, которые использует плашка перевода и окно
+обучения: Alegreya, Caveat, Comfortaa, Fira Code, Fira Sans, JetBrains Mono, Lato, Lora,
+Marck Script, Montserrat, Noto Sans, Nunito, Open Sans, Oswald, Philosopher, Playfair Display,
+Press Start 2P, PT Sans, PT Serif, Roboto, Rubik, Russo One, Source Sans 3, Ubuntu, Yeseva One.
+
+Большинство распространяются по SIL Open Font License 1.1 (OFL) — их можно свободно
+использовать и встраивать в приложение, если сохранять условия лицензии и не продавать
+шрифты отдельно. Перед публичным релизом стоит свериться с лицензией каждого файла
+на странице шрифта в Google Fonts.
+
+## Лицензия
+
+[MIT](LICENSE) © 2026 Владислав Успенский, Вячеслав Успенский.
+
