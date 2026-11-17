@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Файл заметок: слова сгруппированы по дням.</summary>
 internal static class NoteWriter

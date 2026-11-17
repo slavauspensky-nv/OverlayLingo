@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Проверка наборов звуков: сколько щелчков нашлось в каждом.</summary>
 internal static class SoundTest

@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Проверка, что клик по слову в окне перевода доходит до обработчика.</summary>
 internal static class WordTest

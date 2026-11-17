@@ -9,7 +9,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Маленькая подсказка с обратным переводом слова.</summary>
 internal sealed class WordTipWindow : Window

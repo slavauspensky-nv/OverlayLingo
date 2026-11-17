@@ -3,7 +3,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Проверка снимка без сети: распознавание + отрисовка поверх картинки.</summary>
 internal static class ShotTest

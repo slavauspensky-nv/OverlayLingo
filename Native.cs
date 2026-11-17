@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal static class Native
 {

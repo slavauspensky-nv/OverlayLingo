@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>
 /// Chromium-приложения (Chrome, Electron, Telegram) не строят дерево доступности,

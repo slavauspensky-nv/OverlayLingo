@@ -2,7 +2,7 @@
 using System.Text;
 using System.Windows;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal static class Program
 {
@@ -135,7 +135,7 @@ internal static class Program
         // Второй экземпляр не нужен: два наблюдателя и две плашки только мешают.
         // Берём мьютекс через WaitOne — так он корректно освобождается даже после
         // убитого предыдущего процесса.
-        using var singleInstance = new Mutex(false, "WordPeek.SingleInstance");
+        using var singleInstance = new Mutex(false, "OverlayLingo.SingleInstance");
         bool owned;
 
         try
@@ -165,7 +165,7 @@ internal static class Program
             catch (Exception ex)
             {
                 Log.Write("startup: " + ex);
-                MessageBox.Show(ex.ToString(), "WordPeek — ошибка запуска");
+                MessageBox.Show(ex.ToString(), "OverlayLingo — ошибка запуска");
                 app.Shutdown(1);
             }
         };

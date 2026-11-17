@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using WpfImage = System.Windows.Controls.Image;
 using WpfColor = System.Windows.Media.Color;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal sealed class AboutWindow : Window
 {
@@ -35,7 +35,7 @@ internal sealed class AboutWindow : Window
         var titles = new StackPanel();
         titles.Children.Add(new TextBlock
         {
-            Text = "WordPeek",
+            Text = "OverlayLingo",
             FontSize = 24,
             FontWeight = FontWeights.Bold,
             Foreground = new SolidColorBrush(WpfColor.FromRgb(0x1E, 0x22, 0x28))

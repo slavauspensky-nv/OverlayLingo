@@ -1,6 +1,6 @@
 using System.Windows.Media;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Разбор цвета из настроек и общие вычисления оформления.</summary>
 internal static class StyleHelper

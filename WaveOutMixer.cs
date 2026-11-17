@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>
 /// Собственный аудиовыход через waveOut. PlaySound в системе срабатывает

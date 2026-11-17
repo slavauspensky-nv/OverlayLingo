@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Проверяет извлечение поля из конкретного окна (по имени процесса или активного).</summary>
 internal static class FieldTest

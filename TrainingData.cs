@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal sealed class NoteEntry
 {
@@ -13,7 +13,7 @@ internal sealed class NoteEntry
     public string Day = "";
 }
 
-/// <summary>Читает файл заметок WordPeek.txt и раскладывает слова по дням.</summary>
+/// <summary>Читает файл заметок OverlayLingo.txt и раскладывает слова по дням.</summary>
 internal static class TrainingData
 {
     private static readonly Regex DayPattern = new(@"^\d{1,2}\s+\S+\s+\d{4}$", RegexOptions.Compiled);
@@ -27,7 +27,7 @@ internal static class TrainingData
             desktop = AppContext.BaseDirectory;
         }
 
-        return Path.Combine(desktop, "WordPeek.txt");
+        return Path.Combine(desktop, "OverlayLingo.txt");
     }
 
     public static List<NoteEntry> Load(string? path = null)

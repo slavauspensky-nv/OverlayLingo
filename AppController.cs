@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Threading;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal sealed class AppController
 {
@@ -68,17 +68,17 @@ internal sealed class AppController
         _tray.ExitRequested += Shutdown;
         _hotkey.Pressed += Toggle;
 
-        _screenshot = new ScreenshotController(_translator, _settings, message => _tray.Notify("WordPeek", message));
+        _screenshot = new ScreenshotController(_translator, _settings, message => _tray.Notify("OverlayLingo", message));
         _shotHotkey.Pressed += () => _screenshot.Trigger();
         if (!_shotHotkey.TryRegister(Native.MOD_CONTROL | Native.MOD_ALT, 0x53))
         {
-            _tray.Notify("WordPeek", "Не удалось занять Ctrl+Alt+S для снимка с переводом.");
+            _tray.Notify("OverlayLingo", "Не удалось занять Ctrl+Alt+S для снимка с переводом.");
         }
 
         _reopenHotkey.Pressed += () => _screenshot.ReopenLast();
         if (!_reopenHotkey.TryRegister(_settings.ReopenHotkeyModifiers, _settings.ReopenHotkeyKey))
         {
-            _tray.Notify("WordPeek", "Не удалось занять комбинацию повторного показа перевода.");
+            _tray.Notify("OverlayLingo", "Не удалось занять комбинацию повторного показа перевода.");
         }
 
         _tray.SetEnabled(_enabled);
@@ -90,7 +90,7 @@ internal sealed class AppController
 
         if (!_hotkey.TryRegister(_settings.HotkeyModifiers, _settings.HotkeyKey))
         {
-            _tray.Notify("WordPeek",
+            _tray.Notify("OverlayLingo",
                 "Не удалось занять горячую клавишу. Выберите другую в настройках.");
         }
 
@@ -111,7 +111,7 @@ internal sealed class AppController
         {
         }
 
-        _tray.Notify("WordPeek запущен", _enabled
+        _tray.Notify("OverlayLingo запущен", _enabled
             ? "Печатайте в любом поле — перевод появится рядом. Ctrl+Alt+T — включить или выключить."
             : "Внимание: перевод выключен. Нажмите Ctrl+Alt+T, чтобы включить.");
 
@@ -125,7 +125,7 @@ internal sealed class AppController
         _settings.Save();
         _tray.SetEnabled(_enabled);
 
-        _tray.Notify("WordPeek", _enabled
+        _tray.Notify("OverlayLingo", _enabled
             ? "Перевод включён"
             : "Перевод выключен. Нажмите ту же комбинацию, чтобы вернуть.");
 
@@ -344,7 +344,7 @@ internal sealed class AppController
 
                 if (_consecutiveFailures == 3)
                 {
-                    _tray.Notify("WordPeek",
+                    _tray.Notify("OverlayLingo",
                         "Перевод не приходит. Проверьте интернет или провайдера в настройках.");
                 }
 
@@ -383,7 +383,7 @@ internal sealed class AppController
             try
             {
                 Clipboard.SetText(translation);
-                _tray.Notify("WordPeek", "Перевод скопирован");
+                _tray.Notify("OverlayLingo", "Перевод скопирован");
                 return;
             }
             catch (Exception ex)
@@ -407,7 +407,7 @@ internal sealed class AppController
             !string.Equals(foreground, _ownerProcess, StringComparison.OrdinalIgnoreCase))
         {
             Log.Write($"replace отменена: было {_ownerProcess}, сейчас {foreground}");
-            _tray.Notify("WordPeek", "Фокус уже в другом окне — замена отменена");
+            _tray.Notify("OverlayLingo", "Фокус уже в другом окне — замена отменена");
             return;
         }
 
@@ -415,14 +415,14 @@ internal sealed class AppController
         {
             ApplyReplacement(translation, usePaste: true);
             Log.Write($"replaced: \"{translation.Trim()}\"");
-            _tray.Notify("WordPeek", "Текст заменён переводом");
+            _tray.Notify("OverlayLingo", "Текст заменён переводом");
 
             VerifyReplace(translation, allowRetry: true);
         }
         catch (Exception ex)
         {
             Log.Write("replace: " + ex.Message);
-            _tray.Notify("WordPeek", "Не удалось заменить текст");
+            _tray.Notify("OverlayLingo", "Не удалось заменить текст");
         }
     }
 
@@ -559,7 +559,7 @@ internal sealed class AppController
                     {
                         if (TrySetClipboard(expected))
                         {
-                            _tray.Notify("WordPeek",
+                            _tray.Notify("OverlayLingo",
                                 "Заменить не вышло. Перевод скопирован — вставьте вручную (Ctrl+V).");
                         }
                     }));
@@ -690,13 +690,13 @@ internal sealed class AppController
 
         if (!_hotkey.TryRegister(_settings.HotkeyModifiers, _settings.HotkeyKey))
         {
-            _tray.Notify("WordPeek",
+            _tray.Notify("OverlayLingo",
                 "Эта горячая клавиша занята другой программой. Попробуйте другую.");
         }
 
         if (!_reopenHotkey.TryRegister(_settings.ReopenHotkeyModifiers, _settings.ReopenHotkeyKey))
         {
-            _tray.Notify("WordPeek", "Комбинация повторного показа перевода занята другой программой.");
+            _tray.Notify("OverlayLingo", "Комбинация повторного показа перевода занята другой программой.");
         }
 
         if (!_enabled)
@@ -740,12 +740,12 @@ internal sealed class AppController
 
             string path = Path.Combine(AppContext.BaseDirectory, "diagnostics.log");
             File.WriteAllText(path, report.ToString());
-            _tray.Notify("WordPeek", "Диагностика сохранена: diagnostics.log");
+            _tray.Notify("OverlayLingo", "Диагностика сохранена: diagnostics.log");
         }
         catch (Exception ex)
         {
             Log.Write("diagnostics: " + ex.Message);
-            _tray.Notify("WordPeek", "Не удалось сохранить диагностику");
+            _tray.Notify("OverlayLingo", "Не удалось сохранить диагностику");
         }
     }
 

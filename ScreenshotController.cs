@@ -2,7 +2,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Снимок области экрана с переводом поверх исходного текста.</summary>
 internal sealed class ScreenshotController
@@ -247,6 +247,6 @@ internal sealed class ScreenshotController
             desktop = AppContext.BaseDirectory;
         }
 
-        return Path.Combine(desktop, "WordPeek.txt");
+        return Path.Combine(desktop, "OverlayLingo.txt");
     }
 }

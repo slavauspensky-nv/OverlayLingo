@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>
 /// Запасной способ узнать, что печатает человек, для приложений, которые не отдают
@@ -72,7 +72,7 @@ internal sealed class KeyboardFallback : IDisposable
         _thread = new Thread(ThreadLoop)
         {
             IsBackground = true,
-            Name = "wordpeek-keys"
+            Name = "overlaylingo-keys"
         };
         _thread.SetApartmentState(ApartmentState.STA);
         _thread.Start();
@@ -81,7 +81,7 @@ internal sealed class KeyboardFallback : IDisposable
         var watchdog = new Thread(Watchdog)
         {
             IsBackground = true,
-            Name = "wordpeek-keys-watchdog"
+            Name = "overlaylingo-keys-watchdog"
         };
         watchdog.Start();
     }
@@ -101,7 +101,7 @@ internal sealed class KeyboardFallback : IDisposable
         _pollThread = new Thread(PollLoop)
         {
             IsBackground = true,
-            Name = "wordpeek-keys-poll"
+            Name = "overlaylingo-keys-poll"
         };
         _pollThread.Start();
     }

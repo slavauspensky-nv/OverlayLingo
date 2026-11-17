@@ -1,12 +1,12 @@
 using System.IO;
 using Microsoft.Win32;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal static class Autostart
 {
     private const string RunKey = @"Software\Microsoft\Windows\CurrentVersion\Run";
-    private const string ValueName = "WordPeek";
+    private const string ValueName = "OverlayLingo";
 
     public static bool IsEnabled()
     {
@@ -33,7 +33,7 @@ internal static class Autostart
 
             if (enabled)
             {
-                string exe = Path.Combine(AppContext.BaseDirectory, "WordPeek.exe");
+                string exe = Path.Combine(AppContext.BaseDirectory, "OverlayLingo.exe");
                 key.SetValue(ValueName, "\"" + exe + "\"");
             }
             else

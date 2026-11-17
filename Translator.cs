@@ -2,7 +2,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal static class LanguageDetector
 {
@@ -138,7 +138,7 @@ internal sealed class Translator
 
             using var request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.TryAddWithoutValidation("User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) WordPeek/1.0");
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) OverlayLingo/1.0");
 
             using HttpResponseMessage response = await Http.SendAsync(request, cancellationToken);
 
@@ -204,7 +204,7 @@ internal sealed class Translator
 
         using var request = new HttpRequestMessage(HttpMethod.Get, url);
         request.Headers.TryAddWithoutValidation("User-Agent",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) WordPeek/1.0");
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) OverlayLingo/1.0");
 
         using HttpResponseMessage response = await Http.SendAsync(request, cancellationToken);
         if (!response.IsSuccessStatusCode)
@@ -306,7 +306,7 @@ internal sealed class Translator
 
         using var request = new HttpRequestMessage(HttpMethod.Get, url);
         request.Headers.TryAddWithoutValidation("User-Agent",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) WordPeek/1.0");
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) OverlayLingo/1.0");
 
         using HttpResponseMessage response = await Http.SendAsync(request, cancellationToken);
         if (!response.IsSuccessStatusCode)

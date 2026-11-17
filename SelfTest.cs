@@ -5,7 +5,7 @@ using System.Windows.Automation;
 using System.Windows.Automation.Text;
 using System.Windows.Forms;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>
 /// Проверяет, что UIA реально отдаёт текст и прямоугольник каретки для обычного поля ввода.
@@ -19,7 +19,7 @@ internal static class SelfTest
 
         var form = new Form
         {
-            Text = "WordPeek self test",
+            Text = "OverlayLingo self test",
             Width = 560,
             Height = 200,
             StartPosition = FormStartPosition.CenterScreen

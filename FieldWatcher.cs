@@ -1,7 +1,7 @@
 using System.IO;
 using System.Windows.Threading;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>
 /// Опрашивает активное поле ввода в отдельном MTA-потоке и передаёт снимки в UI-поток.
@@ -30,7 +30,7 @@ internal sealed class FieldWatcher : IDisposable
         _thread = new Thread(Loop)
         {
             IsBackground = true,
-            Name = "wordpeek-uia"
+            Name = "overlaylingo-uia"
         };
         _thread.SetApartmentState(ApartmentState.MTA);
         _thread.Start();
@@ -107,7 +107,7 @@ internal static class Log
     private const long MaxBytes = 2_000_000;
 
     private static readonly object Gate = new();
-    private static readonly string FilePath = System.IO.Path.Combine(AppContext.BaseDirectory, "wordpeek.log");
+    private static readonly string FilePath = System.IO.Path.Combine(AppContext.BaseDirectory, "overlaylingo.log");
     private static int _writes;
 
     public static void Write(string message)

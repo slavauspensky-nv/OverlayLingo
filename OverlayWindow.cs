@@ -7,7 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>
 /// Плавающая строка перевода. Не забирает фокус, клик — копирование.

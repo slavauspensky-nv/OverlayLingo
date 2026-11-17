@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Automation.Text;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal sealed class FieldSnapshot
 {

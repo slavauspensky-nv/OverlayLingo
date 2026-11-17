@@ -1,7 +1,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Звуки печати: только реальные записи, разложенные по номерам.</summary>
 internal static class TypingSound

@@ -1,6 +1,6 @@
-# WordPeek
+# OverlayLingo
 
-<p><img src="icon-preview.png" width="88" height="88" alt="WordPeek icon" align="left" hspace="12"></p>
+<p><img src="icon-preview.png" width="88" height="88" alt="OverlayLingo icon" align="left" hspace="12"></p>
 
 **Live translation of what you type — right under the caret.** Type a phrase in any Windows app and an EN↔RU overlay appears next to it. Click the overlay to copy the translation, or press the button to replace the text in the field with it. No window switching, no copy-pasting into a separate translator.
 
@@ -31,7 +31,7 @@
 
 ### Screen capture translation
 
-- **Ctrl + Alt + S** — select a screen region, WordPeek recognizes the text and translates it.
+- **Ctrl + Alt + S** — select a screen region, OverlayLingo recognizes the text and translates it.
 - **OCR runs locally** through `Windows.Media.Ocr` (`ocr.ps1`) — the image never leaves the machine. The `en-US` and `ru` language packs are used; other writing systems need the matching OCR pack installed in Windows (Settings → Time & language).
 - **Any language on the screen** — the recognized text goes through the same auto-detect pipeline, so a Spanish, German or French page comes out in Russian or English. The "Screenshot language" setting only forces the recognition language for a tricky screenshot.
 - In the result window: **click a word for a reverse translation**, **double-click to save the pair to your notebook**, `Esc` to close; the window collapses to its title bar and resizes from the edges.
@@ -46,14 +46,14 @@
 
 ### Study mode built from your own words
 
-- **`WordPeek.txt` on the Desktop** — words are appended automatically and grouped under a date header (e.g. "17 ноября 2026").
+- **`OverlayLingo.txt` on the Desktop** — words are appended automatically and grouped under a date header (e.g. "17 ноября 2026").
 - **Quiz**: EN→RU and RU→EN, "Day" and "All days" modes, rounds with a score and a percentage, a grade for the round, and a replay with different words.
 - The word list is read straight from the notebook, so you can add your own pairs in the `cat — кот` format.
 
 ### Where it works
 
 - **Regular desktop apps** (Word, Notepad, messengers, CRM) — via UI Automation, with an exact caret position.
-- **Chrome, Telegram, Electron**: WordPeek tells the system that a screen reader is present (`SPI_SETSCREENREADER`) and Chromium starts exposing the field text; the setting is restored on exit. There is also a manual route: `chrome://accessibility` → "Native accessibility API support".
+- **Chrome, Telegram, Electron**: OverlayLingo tells the system that a screen reader is present (`SPI_SETSCREENREADER`) and Chromium starts exposing the field text; the setting is restored on exit. There is also a manual route: `chrome://accessibility` → "Native accessibility API support".
 - **Fallback mode** — passive keyboard capture for apps that expose nothing: text is assembled from keystrokes and the overlay appears next to the mouse cursor.
 - **Password fields are skipped** on purpose — UIA marks them as protected.
 
@@ -81,8 +81,8 @@
 
 ## Installation
 
-1. Download `WordPeek-1.0.0-win-x64.zip` from [Releases](../../releases) and unpack it into any folder.
-2. Run `WordPeek.exe` — the app lives in the tray and opens no windows.
+1. Download `OverlayLingo-1.0.0-win-x64.zip` from [Releases](../../releases) and unpack it into any folder.
+2. Run `OverlayLingo.exe` — the app lives in the tray and opens no windows.
 3. Requires [.NET Desktop Runtime 8 (x64)](https://dotnet.microsoft.com/download/dotnet/8.0).
 
 ## Build from source
@@ -90,12 +90,12 @@
 You need Windows 10/11 x64 and the .NET SDK 8.0 (the project is WPF + WinForms, `net8.0-windows`).
 
 ```powershell
-git clone https://github.com/slavauspensky-nv/WordPeek.git
-cd WordPeek
+git clone https://github.com/slavauspensky-nv/OverlayLingo.git
+cd OverlayLingo
 dotnet build -c Release
 ```
 
-The executable is `bin\Release\net8.0-windows\WordPeek.exe`; it needs `WordPeek.dll`, `WordPeek.runtimeconfig.json`, `WordPeek.deps.json` and the `fonts\` and `sounds\` folders next to it.
+The executable is `bin\Release\net8.0-windows\OverlayLingo.exe`; it needs `OverlayLingo.dll`, `OverlayLingo.runtimeconfig.json`, `OverlayLingo.deps.json` and the `fonts\` and `sounds\` folders next to it.
 
 ## Privacy
 
@@ -105,7 +105,7 @@ The executable is `bin\Release\net8.0-windows\WordPeek.exe`; it needs `WordPeek.
 
 ## Limitations
 
-- Apps running as administrator are unreachable while WordPeek runs without elevation.
+- Apps running as administrator are unreachable while OverlayLingo runs without elevation.
 - Terminals, consoles and Java applications do not expose text through UIA.
 - For Chromium apps the caret coordinates are unavailable, so the overlay appears next to the mouse cursor.
 - Google without a key may throttle requests; for steady use, a DeepL key is the better option.
@@ -114,18 +114,18 @@ The executable is `bin\Release\net8.0-windows\WordPeek.exe`; it needs `WordPeek.
 
 ## Diagnostics
 
-`wordpeek.log` is written next to the executable. Command-line modes:
+`overlaylingo.log` is written next to the executable. Command-line modes:
 
 ```
-WordPeek.exe --probe 30      # for 30 seconds dump everything UIA sees to probe.log
-WordPeek.exe --selftest      # read text/caret from its own field → selftest.log
-WordPeek.exe --translate     # exercise the translation service → translate.log
-WordPeek.exe --demo          # draw the overlay and save overlay.png
-WordPeek.exe --hooktest      # test keyboard capture → hooktest.log
-WordPeek.exe --tree 4 chrome # dump an app's accessibility tree → tree.log
-WordPeek.exe --parsetest     # test parsers for Google responses → parsetest.log
-WordPeek.exe --icontest      # test the tray icon → trayicon.png / .ico
-WordPeek.exe --fieldtest     # inspect the focused field → fieldtest.log
+OverlayLingo.exe --probe 30      # for 30 seconds dump everything UIA sees to probe.log
+OverlayLingo.exe --selftest      # read text/caret from its own field → selftest.log
+OverlayLingo.exe --translate     # exercise the translation service → translate.log
+OverlayLingo.exe --demo          # draw the overlay and save overlay.png
+OverlayLingo.exe --hooktest      # test keyboard capture → hooktest.log
+OverlayLingo.exe --tree 4 chrome # dump an app's accessibility tree → tree.log
+OverlayLingo.exe --parsetest     # test parsers for Google responses → parsetest.log
+OverlayLingo.exe --icontest      # test the tray icon → trayicon.png / .ico
+OverlayLingo.exe --fieldtest     # inspect the focused field → fieldtest.log
 ```
 
 Key log lines:

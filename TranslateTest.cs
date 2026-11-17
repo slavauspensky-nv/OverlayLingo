@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Прогоняет реальный сервис перевода и пишет результат в translate.log.</summary>
 internal static class TranslateTest

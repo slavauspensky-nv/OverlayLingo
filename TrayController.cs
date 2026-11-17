@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal sealed class TrayController : IDisposable
 {
@@ -28,7 +28,7 @@ internal sealed class TrayController : IDisposable
         {
             Icon = BuildIcon(),
             Visible = true,
-            Text = "WordPeek",
+            Text = "OverlayLingo",
             ContextMenuStrip = menu
         };
 
@@ -52,7 +52,7 @@ internal sealed class TrayController : IDisposable
     public void SetEnabled(bool enabled)
     {
         _toggleItem.Text = enabled ? "Выключить перевод" : "Включить перевод";
-        _icon.Text = enabled ? "WordPeek — перевод включён" : "WordPeek — перевод выключен";
+        _icon.Text = enabled ? "OverlayLingo — перевод включён" : "OverlayLingo — перевод выключен";
     }
 
     public void Notify(string title, string message, ToolTipIcon icon = ToolTipIcon.Info)

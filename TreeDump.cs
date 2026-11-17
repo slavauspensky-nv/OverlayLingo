@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Automation;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>
 /// Выгружает дерево UI Automation активного окна (или окна указанного процесса).

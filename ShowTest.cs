@@ -2,7 +2,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Показывает плашку в заданной точке и держит её указанное время — для проверки на экране.</summary>
 internal static class ShowTest

@@ -1,6 +1,6 @@
-# WordPeek
+# OverlayLingo
 
-<p><img src="icon-preview.png" width="88" height="88" alt="Иконка WordPeek" align="left" hspace="12"></p>
+<p><img src="icon-preview.png" width="88" height="88" alt="Иконка OverlayLingo" align="left" hspace="12"></p>
 
 **Живой перевод того, что вы печатаете, — прямо под кареткой.** Набираете фразу в любом приложении Windows — рядом появляется плашка с переводом EN↔RU. Клик по плашке копирует перевод, кнопка — подставляет его в поле вместо исходного текста. Не нужно ни переключать окна, ни копировать в сторонний переводчик.
 
@@ -31,7 +31,7 @@
 
 ### Перевод текста со скриншота
 
-- **Ctrl + Alt + S** — выделяете область мышью, WordPeek распознаёт текст на картинке и переводит его.
+- **Ctrl + Alt + S** — выделяете область мышью, OverlayLingo распознаёт текст на картинке и переводит его.
 - **OCR работает локально** — через `Windows.Media.Ocr` (скрипт `ocr.ps1`), картинка никуда не отправляется. Используются языковые пакеты `en-US` и `ru`; для других письменностей нужен соответствующий пакет OCR в Windows (Параметры → Время и язык).
 - **Любой язык на экране** — распознанный текст идёт в тот же конвейер с автоопределением языка, поэтому испанская, немецкая или французская страница придёт на русском или английском. Настройка «Язык текста на скриншоте» лишь принудительно задаёт язык распознавания, если снимок сложный.
 - В окне результата: **клик по слову — обратный перевод**, **двойной клик — слово уходит в блокнот** для обучения, `Esc` — закрыть, окно сворачивается до заголовка и растягивается за края.
@@ -46,14 +46,14 @@
 
 ### Обучение по своим словам
 
-- **Блокнот `WordPeek.txt` на рабочем столе** — слова складываются туда сами, с заголовком по дням («17 ноября 2026»).
+- **Блокнот `OverlayLingo.txt` на рабочем столе** — слова складываются туда сами, с заголовком по дням («17 ноября 2026»).
 - **Викторина**: перевод EN→RU и RU→EN, режимы «День» и «Все дни», раунды с подсчётом верных ответов и процентом, оценка результата и повторный раунд с другими словами.
 - Список слов читается прямо из блокнота — можно дописывать свои пары вручную в формате `cat — кот`.
 
 ### Где это работает
 
 - **Обычные приложения** (Word, Notepad, мессенджеры, CRM) — через UI Automation, с точной позицией каретки.
-- **Chrome, Telegram, Electron**: WordPeek сообщает системе, что работает экранный диктор (`SPI_SETSCREENREADER`), и Chromium начинает отдавать текст поля; при выходе настройка возвращается как была. Есть и ручной путь — `chrome://accessibility` → «Native accessibility API support».
+- **Chrome, Telegram, Electron**: OverlayLingo сообщает системе, что работает экранный диктор (`SPI_SETSCREENREADER`), и Chromium начинает отдавать текст поля; при выходе настройка возвращается как была. Есть и ручной путь — `chrome://accessibility` → «Native accessibility API support».
 - **Запасной режим** — пассивный перехват клавиатуры, когда доступность не помогла: текст собирается по нажатиям, плашка встаёт у курсора мыши.
 - **Поля паролей** игнорируются намеренно — UIA помечает их как защищённые.
 
@@ -81,8 +81,8 @@
 
 ## Установка
 
-1. Скачайте `WordPeek-1.0.0-win-x64.zip` из [Releases](../../releases) и распакуйте в любую папку.
-2. Запустите `WordPeek.exe` — приложение живёт в трее, окон не открывает.
+1. Скачайте `OverlayLingo-1.0.0-win-x64.zip` из [Releases](../../releases) и распакуйте в любую папку.
+2. Запустите `OverlayLingo.exe` — приложение живёт в трее, окон не открывает.
 3. Нужен [.NET Desktop Runtime 8 (x64)](https://dotnet.microsoft.com/download/dotnet/8.0).
 
 ## Сборка из исходников
@@ -90,12 +90,12 @@
 Нужен Windows 10/11 x64 и .NET SDK 8.0 (проект — WPF + WinForms, `net8.0-windows`).
 
 ```powershell
-git clone https://github.com/slavauspensky-nv/WordPeek.git
-cd WordPeek
+git clone https://github.com/slavauspensky-nv/OverlayLingo.git
+cd OverlayLingo
 dotnet build -c Release
 ```
 
-Готовый файл — `bin\Release\net8.0-windows\WordPeek.exe`; рядом должны лежать `WordPeek.dll`, `WordPeek.runtimeconfig.json`, `WordPeek.deps.json`, папки `fonts\` и `sounds\`.
+Готовый файл — `bin\Release\net8.0-windows\OverlayLingo.exe`; рядом должны лежать `OverlayLingo.dll`, `OverlayLingo.runtimeconfig.json`, `OverlayLingo.deps.json`, папки `fonts\` и `sounds\`.
 
 ## Приватность
 
@@ -105,7 +105,7 @@ dotnet build -c Release
 
 ## Ограничения
 
-- Приложения, запущенные от администратора, недоступны, если WordPeek запущен без прав администратора.
+- Приложения, запущенные от администратора, недоступны, если OverlayLingo запущен без прав администратора.
 - Терминал, консоль и Java-приложения текст через UIA не отдают.
 - Для Chromium-приложений координаты каретки недоступны — плашка встаёт у курсора мыши.
 - Google без ключа может ограничивать частоту запросов; для стабильной работы подходит ключ DeepL.
@@ -114,18 +114,18 @@ dotnet build -c Release
 
 ## Диагностика
 
-Рядом с exe пишется `wordpeek.log`. Режимы запуска из командной строки:
+Рядом с exe пишется `overlaylingo.log`. Режимы запуска из командной строки:
 
 ```
-WordPeek.exe --probe 30      # 30 секунд писать в probe.log всё, что видит UIA
-WordPeek.exe --selftest      # проверить чтение текста/каретки на своём поле → selftest.log
-WordPeek.exe --translate     # прогнать сервис перевода → translate.log
-WordPeek.exe --demo          # нарисовать плашку и сохранить overlay.png
-WordPeek.exe --hooktest      # проверить перехват клавиатуры → hooktest.log
-WordPeek.exe --tree 4 chrome # выгрузить дерево доступности окна → tree.log
-WordPeek.exe --parsetest     # проверить разбор ответов Google → parsetest.log
-WordPeek.exe --icontest      # проверить иконку трея → trayicon.png / .ico
-WordPeek.exe --fieldtest     # разобрать поле активного окна → fieldtest.log
+OverlayLingo.exe --probe 30      # 30 секунд писать в probe.log всё, что видит UIA
+OverlayLingo.exe --selftest      # проверить чтение текста/каретки на своём поле → selftest.log
+OverlayLingo.exe --translate     # прогнать сервис перевода → translate.log
+OverlayLingo.exe --demo          # нарисовать плашку и сохранить overlay.png
+OverlayLingo.exe --hooktest      # проверить перехват клавиатуры → hooktest.log
+OverlayLingo.exe --tree 4 chrome # выгрузить дерево доступности окна → tree.log
+OverlayLingo.exe --parsetest     # проверить разбор ответов Google → parsetest.log
+OverlayLingo.exe --icontest      # проверить иконку трея → trayicon.png / .ico
+OverlayLingo.exe --fieldtest     # разобрать поле активного окна → fieldtest.log
 ```
 
 Основные строки лога:

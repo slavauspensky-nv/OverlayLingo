@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Отрисовывает образец всех встроенных шрифтов.</summary>
 internal static class FontTest

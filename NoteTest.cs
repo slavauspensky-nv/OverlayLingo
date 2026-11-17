@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Проверка разбивки заметок по датам.</summary>
 internal static class NoteTest

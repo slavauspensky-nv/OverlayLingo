@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal sealed class SettingsWindow : Window
 {
@@ -49,7 +49,7 @@ internal sealed class SettingsWindow : Window
         _reopenModifiers = settings.ReopenHotkeyModifiers;
         _reopenKey = settings.ReopenHotkeyKey;
 
-        Title = "WordPeek — настройки";
+        Title = "OverlayLingo — настройки";
         Width = 470;
         SizeToContent = SizeToContent.Manual;
         Height = Math.Max(420, Math.Min(1000, SystemParameters.WorkArea.Height * 0.9));

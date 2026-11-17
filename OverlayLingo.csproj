@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -8,14 +8,14 @@
     <LangVersion>latest</LangVersion>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyName>WordPeek</AssemblyName>
-    <RootNamespace>WordPeek</RootNamespace>
+    <AssemblyName>OverlayLingo</AssemblyName>
+    <RootNamespace>OverlayLingo</RootNamespace>
     <Version>1.0.0</Version>
-    <Product>WordPeek</Product>
-    <AssemblyTitle>WordPeek</AssemblyTitle>
+    <Product>OverlayLingo</Product>
+    <AssemblyTitle>OverlayLingo</AssemblyTitle>
     <Company>Vladislav Uspensky, Vyacheslav Uspensky</Company>
     <Copyright>© 2026 Vladislav Uspensky, Vyacheslav Uspensky</Copyright>
-    <Description>Живой перевод текста из активного поля ввода</Description>
+    <Description>Live translation of what you type, right under the caret</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <PlatformTarget>x64</PlatformTarget>

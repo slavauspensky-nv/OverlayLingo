@@ -4,7 +4,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Показывает плашку с образцом текста и сохраняет её внешний вид в overlay.png.</summary>
 internal static class Demo

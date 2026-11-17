@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Проверка разбора заметок и сборки вопросов для обучения.</summary>
 internal static class QuizTest

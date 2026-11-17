@@ -1,6 +1,6 @@
 using System.Windows.Interop;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 internal sealed class HotkeyManager : IDisposable
 {
@@ -44,7 +44,7 @@ internal sealed class HotkeyManager : IDisposable
             return;
         }
 
-        var parameters = new HwndSourceParameters("WordPeekHotkey")
+        var parameters = new HwndSourceParameters("OverlayLingoHotkey")
         {
             Width = 0,
             Height = 0,

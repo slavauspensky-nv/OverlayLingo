@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>
 /// Проверяет разбор ответов Google на реальных образцах, без обращения к сети.

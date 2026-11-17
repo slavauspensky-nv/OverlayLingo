@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Тренировка слов в духе Anki: карточка, четыре варианта, прогресс раунда.</summary>
 internal sealed class TrainingWindow : Window
@@ -47,7 +47,7 @@ internal sealed class TrainingWindow : Window
 
     public TrainingWindow(string? notesPath = null)
     {
-        Title = "Обучение — WordPeek";
+        Title = "Обучение — OverlayLingo";
         Width = 580;
         Height = 620;
         MinWidth = 480;
@@ -474,7 +474,7 @@ internal sealed class TrainingWindow : Window
 
         _prompt.Text = "Список слов пуст";
         _hint.Text = TrainingData.NotesPath();
-        _feedback.Text = "Добавляй слова двойным кликом по слову в окне перевода — они появятся в WordPeek.txt.";
+        _feedback.Text = "Добавляй слова двойным кликом по слову в окне перевода — они появятся в OverlayLingo.txt.";
         _feedback.Foreground = Muted;
 
         _options.Children.Clear();

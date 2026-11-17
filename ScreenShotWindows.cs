@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WpfImage = System.Windows.Controls.Image;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Затемнение экрана с рамкой выделения области.</summary>
 internal sealed class RegionSelector : Window

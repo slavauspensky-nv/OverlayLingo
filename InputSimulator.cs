@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Синтез ввода: выделить всё и набрать текст. Используется для замены текста переводом.</summary>
 internal static class InputSimulator

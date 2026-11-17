@@ -1,7 +1,7 @@
 using System.IO;
 using System.Windows.Media;
 
-namespace WordPeek;
+namespace OverlayLingo;
 
 /// <summary>Встроенные шрифты окна перевода (все с поддержкой кириллицы).</summary>
 internal static class FontHelper
