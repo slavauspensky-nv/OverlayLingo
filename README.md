@@ -1,91 +1,93 @@
 # WordPeek
 
-<p><img src="icon-preview.png" width="88" height="88" alt="Иконка WordPeek" align="left" hspace="12"></p>
+<p><img src="icon-preview.png" width="88" height="88" alt="WordPeek icon" align="left" hspace="12"></p>
 
-**Живой перевод того, что вы печатаете, — прямо под кареткой.** Набираете фразу в любом приложении Windows — рядом появляется плашка с переводом EN↔RU. Клик по плашке копирует перевод, кнопка — подставляет его в поле вместо исходного текста. Не нужно ни переключать окна, ни копировать в сторонний переводчик.
+**Live translation of what you type — right under the caret.** Type a phrase in any Windows app and an EN↔RU overlay appears next to it. Click the overlay to copy the translation, or press the button to replace the text in the field with it. No window switching, no copy-pasting into a separate translator.
 
-`Windows 10/11 x64` · `.NET 8` · `MIT` · без регистрации и API-ключа для Google
+`Windows 10/11 x64` · `.NET 8` · `MIT` · no account or API key required for Google
+
+> Русская версия — [README.ru.md](README.ru.md)
 
 ---
 
-## Возможности
+## Features
 
-### Перевод из активного поля
+### Translation from the active field
 
-- **Чтение поля через UI Automation** — `TextPattern`/`ValuePattern`; у свёрнутой каретки диапазон растягивается на символ, чтобы позиция плашки была точной.
-- **Плашка всегда сверху, но не забирает фокус** — можно продолжать печатать, курсор не улетает из поля.
-- **Клик по плашке — копирование** перевода в буфер обмена.
-- **Кнопка замены** — подставляет перевод прямо в поле и проверяет, что текст действительно заменился (`replace check: успешно` в логе).
-- **Пауза 130 мс** (настраивается) — перевод уходит не на каждое нажатие, а после остановки набора.
-- **Повторный вызов последнего перевода** — если закрыли плашку, её можно вернуть горячей клавишей.
+- **Reads the focused field through UI Automation** (`TextPattern` / `ValuePattern`) and tracks the caret rectangle; a collapsed caret is widened to a full character so the overlay lands precisely.
+- **Always-on-top overlay that never takes focus** — keep typing, the caret stays in your field.
+- **Click the overlay to copy** the translation to the clipboard.
+- **Replace button** puts the translation back into the field and verifies the text actually changed (`replace check: успешно` in the log).
+- **130 ms typing pause** (configurable) so requests fire after you stop typing, not on every keystroke.
+- **Reopen the last translation** with a hotkey after the overlay was closed.
 
-### Перевод
+### Translation services
 
-- **Google без ключа** — два разных публичных эндпоинта и резервный MyMemory на случай, если один недоступен.
-- **DeepL** — с личным ключом API (поддерживаются и free-, и pro-ключи).
-- **Автоопределение языка** — EN→RU или RU→EN решается по тексту; в настройках есть кнопка «Проверить связь».
-- **Кэш на 2000 фраз** с вытеснением по давности: повторно набранный текст переводится мгновенно.
-- **Один запрос в полёте** плюс таймаут 7 секунд — интерфейс не залипает на медленной сети.
+- **Google without an API key** — two public endpoints plus MyMemory as a fallback if one of them fails.
+- **DeepL** with a personal API key (both free and pro keys are supported).
+- **Automatic language detection** — EN→RU or RU→EN is decided from the text; the settings window has a "Check connection" button.
+- **LRU cache of 2000 phrases** with least-recently-used eviction: repeated phrases come back instantly.
+- **One request in flight** and a 7-second timeout, so the UI never freezes on a slow network.
 
-### Перевод текста со скриншота
+### Screen capture translation
 
-- **Ctrl + Alt + S** — выделяете область мышью, WordPeek распознаёт текст на картинке и переводит его.
-- **OCR работает локально** — через `Windows.Media.Ocr` (скрипт `ocr.ps1`), языки `en-US` и `ru`, без отправки картинки в интернет.
-- **Язык текста на скриншоте** — автоматически или вручную (английский/русский).
-- В окне результата: **клик по слову — обратный перевод**, **двойной клик — слово уходит в блокнот** для обучения, `Esc` — закрыть, окно сворачивается до заголовка и растягивается за края.
+- **Ctrl + Alt + S** — select a screen region, WordPeek recognizes the text and translates it.
+- **OCR runs locally** through `Windows.Media.Ocr` (`ocr.ps1`), languages `en-US` and `ru`; the image is never uploaded anywhere.
+- **Screenshot language** — automatic or explicit (English / Russian).
+- In the result window: **click a word for a reverse translation**, **double-click to save the pair to your notebook**, `Esc` to close; the window collapses to its title bar and resizes from the edges.
 
-### Оформление и звук
+### Look and sound
 
-- **25 шрифтов** на выбор (Press Start 2P по умолчанию, Roboto, JetBrains Mono, Montserrat, PT Sans, Lora и другие).
-- **Цвет текста и фона, прозрачность**, размер шрифта и размер окна — с живым предпросмотром.
-- **Эффект машинки** — текст печатается по буквам с регулируемой скоростью.
-- **5 наборов звуков печати** (реальные записи: typewriter, mechanical, laptop, retro, membrane), громкость 0–100 %, кнопка «Прослушать».
-- **Позиция окна**: у выделения или запомненная; есть сброс в положение по умолчанию.
+- **25 fonts** (Press Start 2P by default, plus Roboto, JetBrains Mono, Montserrat, PT Sans, Lora and others).
+- **Text and background colors, opacity, font size, window size** — with a live preview.
+- **Typewriter effect** — the translation is revealed character by character at an adjustable speed.
+- **5 sets of real typing recordings** (typewriter, mechanical, laptop, retro, membrane), volume 0–100 %, with a "Preview" button.
+- **Window position** — next to the selection or remembered between runs; reset to the default is one click away.
 
-### Обучение по своим словам
+### Study mode built from your own words
 
-- **Блокнот `WordPeek.txt` на рабочем столе** — слова складываются туда сами, с заголовком по дням («17 ноября 2026»).
-- **Викторина**: перевод EN→RU и RU→EN, режимы «День» и «Все дни», раунды с подсчётом верных ответов и процентом, оценка результата и повторный раунд с другими словами.
-- Список слов читается прямо из блокнота — можно дописывать свои пары вручную в формате `cat — кот`.
+- **`WordPeek.txt` on the Desktop** — words are appended automatically and grouped under a date header (e.g. "17 ноября 2026").
+- **Quiz**: EN→RU and RU→EN, "Day" and "All days" modes, rounds with a score and a percentage, a grade for the round, and a replay with different words.
+- The word list is read straight from the notebook, so you can add your own pairs in the `cat — кот` format.
 
-### Где это работает
+### Where it works
 
-- **Обычные приложения** (Word, Notepad, мессенджеры, CRM) — через UI Automation, с точной позицией каретки.
-- **Chrome, Telegram, Electron**: WordPeek сообщает системе, что работает экранный диктор (`SPI_SETSCREENREADER`), и Chromium начинает отдавать текст поля; при выходе настройка возвращается как была. Есть и ручной путь — `chrome://accessibility` → «Native accessibility API support».
-- **Запасной режим** — пассивный перехват клавиатуры, когда доступность не помогла: текст собирается по нажатиям, плашка встаёт у курсора мыши.
-- **Поля паролей** игнорируются намеренно — UIA помечает их как защищённые.
+- **Regular desktop apps** (Word, Notepad, messengers, CRM) — via UI Automation, with an exact caret position.
+- **Chrome, Telegram, Electron**: WordPeek tells the system that a screen reader is present (`SPI_SETSCREENREADER`) and Chromium starts exposing the field text; the setting is restored on exit. There is also a manual route: `chrome://accessibility` → "Native accessibility API support".
+- **Fallback mode** — passive keyboard capture for apps that expose nothing: text is assembled from keystrokes and the overlay appears next to the mouse cursor.
+- **Password fields are skipped** on purpose — UIA marks them as protected.
 
-### Системная интеграция
+### System integration
 
-- **Трей-иконка** с меню: включить/выключить перевод, обучение, настройки, диагностика, о программе, выход.
-- **Автозапуск** при входе в Windows.
-- **Включение и выключение** перевода одной горячей клавишей, без перезапуска.
-- **Настройки в `settings.json`** рядом с exe.
+- **Tray icon** with a menu: enable/disable translation, study, settings, diagnostics, about, exit.
+- **Start with Windows**.
+- **Toggle translation** with a single hotkey, no restart.
+- **Settings live in `settings.json`** next to the executable.
 
-## Горячие клавиши
+## Hotkeys
 
-| Комбинация | Действие |
+| Shortcut | Action |
 |---|---|
-| `Ctrl + Alt + T` | включить/выключить перевод (настраивается) |
-| `Ctrl + Alt + S` | перевод текста с выделенной области экрана |
-| `Ctrl + Alt + R` | вернуть последнее окно перевода (настраивается) |
+| `Ctrl + Alt + T` | enable / disable translation (configurable) |
+| `Ctrl + Alt + S` | translate a selected screen region |
+| `Ctrl + Alt + R` | reopen the last translation window (configurable) |
 
-## Как это работает
+## How it works
 
-1. Наблюдатель опрашивает активное поле: текст и прямоугольник каретки через UI Automation.
-2. После паузы (130 мс по умолчанию) текст уходит в сервис перевода — Google, MyMemory или DeepL.
-3. Ответ кладётся в кэш и показывается в плашке поверх всех окон, без перехвата фокуса.
-4. Клик — копирование, кнопка — замена текста в поле, двойной клик в окне скриншота — слово в блокнот.
+1. A watcher polls the focused field and reads its text plus the caret rectangle through UI Automation.
+2. After a pause (130 ms by default) the text goes to the translation service — Google, MyMemory or DeepL.
+3. The answer is cached and shown in a topmost overlay that does not steal focus.
+4. A click copies it, the button replaces the field text, and a double-click in the screenshot window saves the word to the notebook.
 
-## Установка
+## Installation
 
-1. Скачайте `WordPeek-1.0.0-win-x64.zip` из [Releases](../../releases) и распакуйте в любую папку.
-2. Запустите `WordPeek.exe` — приложение живёт в трее, окон не открывает.
-3. Нужен [.NET Desktop Runtime 8 (x64)](https://dotnet.microsoft.com/download/dotnet/8.0).
+1. Download `WordPeek-1.0.0-win-x64.zip` from [Releases](../../releases) and unpack it into any folder.
+2. Run `WordPeek.exe` — the app lives in the tray and opens no windows.
+3. Requires [.NET Desktop Runtime 8 (x64)](https://dotnet.microsoft.com/download/dotnet/8.0).
 
-## Сборка из исходников
+## Build from source
 
-Нужен Windows 10/11 x64 и .NET SDK 8.0 (проект — WPF + WinForms, `net8.0-windows`).
+You need Windows 10/11 x64 and the .NET SDK 8.0 (the project is WPF + WinForms, `net8.0-windows`).
 
 ```powershell
 git clone https://github.com/slavauspensky-nv/WordPeek.git
@@ -93,60 +95,60 @@ cd WordPeek
 dotnet build -c Release
 ```
 
-Готовый файл — `bin\Release\net8.0-windows\WordPeek.exe`; рядом должны лежать `WordPeek.dll`, `WordPeek.runtimeconfig.json`, `WordPeek.deps.json`, папки `fonts\` и `sounds\`.
+The executable is `bin\Release\net8.0-windows\WordPeek.exe`; it needs `WordPeek.dll`, `WordPeek.runtimeconfig.json`, `WordPeek.deps.json` and the `fonts\` and `sounds\` folders next to it.
 
-## Приватность
+## Privacy
 
-- Текст уходит только в выбранный сервис перевода; картинка при OCR не покидает машину.
-- **Пассивный перехват клавиатуры видит всё, что печатается, включая пароли** — он включается галочкой в настройках и отключается там же. Если не нужен, выключите.
-- Поля ввода с паролями пропускаются и при чтении через UI Automation.
+- Text is sent only to the translation service you selected; the OCR image never leaves your machine.
+- **Passive keyboard capture sees everything you type, including passwords** — it is enabled by a checkbox in settings and can be turned off there. Disable it if you don't need it.
+- Fields marked as password inputs are skipped even when read through UI Automation.
 
-## Ограничения
+## Limitations
 
-- Приложения, запущенные от администратора, недоступны, если WordPeek запущен без прав администратора.
-- Терминал, консоль и Java-приложения текст через UIA не отдают.
-- Для Chromium-приложений координаты каретки недоступны — плашка встаёт у курсора мыши.
-- Google без ключа может ограничивать частоту запросов; для стабильной работы подходит ключ DeepL.
+- Apps running as administrator are unreachable while WordPeek runs without elevation.
+- Terminals, consoles and Java applications do not expose text through UIA.
+- For Chromium apps the caret coordinates are unavailable, so the overlay appears next to the mouse cursor.
+- Google without a key may throttle requests; for steady use, a DeepL key is the better option.
 
-## Диагностика
+## Diagnostics
 
-Рядом с exe пишется `wordpeek.log`. Режимы запуска из командной строки:
+`wordpeek.log` is written next to the executable. Command-line modes:
 
 ```
-WordPeek.exe --probe 30      # 30 секунд писать в probe.log всё, что видит UIA
-WordPeek.exe --selftest      # проверить чтение текста/каретки на своём поле → selftest.log
-WordPeek.exe --translate     # прогнать сервис перевода → translate.log
-WordPeek.exe --demo          # нарисовать плашку и сохранить overlay.png
-WordPeek.exe --hooktest      # проверить перехват клавиатуры → hooktest.log
-WordPeek.exe --tree 4 chrome # выгрузить дерево доступности окна → tree.log
-WordPeek.exe --parsetest     # проверить разбор ответов Google → parsetest.log
-WordPeek.exe --icontest      # проверить иконку трея → trayicon.png / .ico
-WordPeek.exe --fieldtest     # разобрать поле активного окна → fieldtest.log
+WordPeek.exe --probe 30      # for 30 seconds dump everything UIA sees to probe.log
+WordPeek.exe --selftest      # read text/caret from its own field → selftest.log
+WordPeek.exe --translate     # exercise the translation service → translate.log
+WordPeek.exe --demo          # draw the overlay and save overlay.png
+WordPeek.exe --hooktest      # test keyboard capture → hooktest.log
+WordPeek.exe --tree 4 chrome # dump an app's accessibility tree → tree.log
+WordPeek.exe --parsetest     # test parsers for Google responses → parsetest.log
+WordPeek.exe --icontest      # test the tray icon → trayicon.png / .ico
+WordPeek.exe --fieldtest     # inspect the focused field → fieldtest.log
 ```
 
-Основные строки лога:
+Key log lines:
 
-| Строка | Значение |
+| Line | Meaning |
 |---|---|
-| `started`, `build ...` | запуск и время сборки |
-| `tray: создан` | иконка в трее зарегистрирована |
-| `accessibility: request=... error=...` | попытка включить доступность для Chromium-приложений |
-| `keyboard hook: установлен` | пассивный перехват клавиатуры включён |
-| `snap: field=... proc=...` | смена активного поля или приложения |
-| `field proc=Notepad ... text="..."` | найден текст поля |
-| `hook: "..."` | текст восстановлен перехватом клавиатуры |
-| `ok: "..."` | получен перевод |
-| `replace check: успешно` / `НЕ СРАБОТАЛО` | результат подстановки перевода в поле |
-| `blind: proc=chrome` | приложение не отдаёт текст через UIA |
+| `started`, `build ...` | startup and build timestamp |
+| `tray: создан` | tray icon registered |
+| `accessibility: request=... error=...` | attempt to enable accessibility for Chromium apps |
+| `keyboard hook: установлен` | passive keyboard capture is active |
+| `snap: field=... proc=...` | focused field or application changed |
+| `field proc=Notepad ... text="..."` | field text discovered |
+| `hook: "..."` | text reconstructed from keystrokes |
+| `ok: "..."` | translation received |
+| `replace check: успешно` / `НЕ СРАБОТАЛО` | whether the replacement landed in the field |
+| `blind: proc=chrome` | the app exposes no text through UIA |
 
-Если `SPI_SETSCREENREADER` запрещён системой (в логе `error=5`), доступность Chrome не включится — остаётся перехват клавиатуры либо ручное включение через `chrome://accessibility`.
+If `SPI_SETSCREENREADER` is blocked by the system (`error=5` in the log), Chrome accessibility stays off — keyboard capture or the manual `chrome://accessibility` toggle is the way around it.
 
-## Шрифты
+## Fonts
 
-В `fonts/` лежат 25 шрифтов с Google Fonts, которые использует плашка перевода и окно обучения: Alegreya, Caveat, Comfortaa, Fira Code, Fira Sans, JetBrains Mono, Lato, Lora, Marck Script, Montserrat, Noto Sans, Nunito, Open Sans, Oswald, Philosopher, Playfair Display, Press Start 2P, PT Sans, PT Serif, Roboto, Rubik, Russo One, Source Sans 3, Ubuntu, Yeseva One.
+The `fonts/` folder holds 25 Google Fonts used by the overlay and the study window: Alegreya, Caveat, Comfortaa, Fira Code, Fira Sans, JetBrains Mono, Lato, Lora, Marck Script, Montserrat, Noto Sans, Nunito, Open Sans, Oswald, Philosopher, Playfair Display, Press Start 2P, PT Sans, PT Serif, Roboto, Rubik, Russo One, Source Sans 3, Ubuntu, Yeseva One.
 
-Большинство распространяются по SIL Open Font License 1.1 (OFL) — их можно свободно использовать и встраивать в приложение, если сохранять условия лицензии и не продавать шрифты отдельно. Перед публичным релизом стоит свериться с лицензией каждого файла на странице шрифта в Google Fonts.
+Most of them are distributed under the SIL Open Font License 1.1 (OFL): free to use and embed in an application as long as the license terms are kept and the fonts are not sold on their own. Before a public release, check the license on each font's Google Fonts page.
 
-## Лицензия
+## License
 
-[MIT](LICENSE) © 2026 Владислав Успенский, Вячеслав Успенский.
+[MIT](LICENSE) © 2026 Vladislav Uspensky, Vyacheslav Uspensky.
