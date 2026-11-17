@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
@@ -147,26 +147,45 @@ internal sealed class TrayController : IDisposable
 
     private static Bitmap RenderIcon()
     {
+        // Запасная иконка повторяет app.ico: индиго-плитка, белая «A», янтарная каретка.
         var bitmap = new Bitmap(32, 32);
         using (var graphics = Graphics.FromImage(bitmap))
         {
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             graphics.Clear(Color.Transparent);
 
-            using var background = new SolidBrush(Color.FromArgb(45, 122, 240));
-            graphics.FillEllipse(background, 1, 1, 30, 30);
+            using var tile = RoundedRect(new RectangleF(0.5f, 0.5f, 31f, 31f), 6f);
+            using var background = new SolidBrush(Color.FromArgb(48, 82, 214));
+            graphics.FillPath(background, tile);
 
             using var foreground = new SolidBrush(Color.White);
-            using var font = new Font("Segoe UI", 16f, FontStyle.Bold, GraphicsUnit.Pixel);
+            using var font = new Font("Segoe UI", 15f, FontStyle.Bold, GraphicsUnit.Pixel);
             var format = new StringFormat
             {
                 Alignment = StringAlignment.Center,
                 LineAlignment = StringAlignment.Center
             };
-            graphics.DrawString("A", font, foreground, new RectangleF(0, 0, 32, 32), format);
+            graphics.DrawString("A", font, foreground, new RectangleF(0f, -1.5f, 32f, 26f), format);
+
+            using var caret = new SolidBrush(Color.FromArgb(255, 176, 32));
+            using var caretPath = RoundedRect(new RectangleF(10f, 23f, 12f, 3f), 1.5f);
+            graphics.FillPath(caret, caretPath);
         }
 
         return bitmap;
+    }
+
+    private static GraphicsPath RoundedRect(RectangleF bounds, float radius)
+    {
+        var path = new GraphicsPath();
+        float d = radius * 2;
+        path.AddArc(bounds.X, bounds.Y, d, d, 180, 90);
+        path.AddArc(bounds.Right - d, bounds.Y, d, d, 270, 90);
+        path.AddArc(bounds.Right - d, bounds.Bottom - d, d, d, 0, 90);
+        path.AddArc(bounds.X, bounds.Bottom - d, d, d, 90, 90);
+        path.CloseFigure();
+        return path;
     }
 
     [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)]
