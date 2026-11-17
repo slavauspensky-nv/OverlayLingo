@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
@@ -12,17 +12,24 @@ internal sealed class TrayController : IDisposable
 
     public TrayController()
     {
-        _toggleItem = new ToolStripMenuItem("Выключить перевод");
+        _toggleItem = new ToolStripMenuItem("Живой перевод из поля") { CheckOnClick = false };
         _toggleItem.Click += (_, _) => ToggleRequested?.Invoke();
 
-        var menu = new ContextMenuStrip();
+        var shot = new ToolStripMenuItem("Снимок области с переводом", null, (_, _) => ShotRequested?.Invoke());
+
+        var menu = new ContextMenuStrip { ShowItemToolTips = true };
+        menu.Items.Add(shot);
         menu.Items.Add(_toggleItem);
-        menu.Items.Add(new ToolStripMenuItem("Обучение…", null, (_, _) => TrainingRequested?.Invoke()));
+        menu.Items.Add(new ToolStripSeparator());
+        menu.Items.Add(new ToolStripMenuItem("Тренировка слов…", null, (_, _) => TrainingRequested?.Invoke()));
         menu.Items.Add(new ToolStripMenuItem("Настройки…", null, (_, _) => SettingsRequested?.Invoke()));
-        menu.Items.Add(new ToolStripMenuItem("Диагностика…", null, (_, _) => DiagnosticsRequested?.Invoke()));
+        menu.Items.Add(new ToolStripMenuItem("Состояние и диагностика…", null, (_, _) => DiagnosticsRequested?.Invoke()));
         menu.Items.Add(new ToolStripMenuItem("О программе…", null, (_, _) => AboutRequested?.Invoke()));
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(new ToolStripMenuItem("Выход", null, (_, _) => ExitRequested?.Invoke()));
+
+        shot.ToolTipText = "Обвести область экрана и получить перевод";
+        _toggleItem.ToolTipText = "Перевод по мере набора текста в поле ввода";
 
         _icon = new NotifyIcon
         {
@@ -39,6 +46,8 @@ internal sealed class TrayController : IDisposable
 
     public event Action? ToggleRequested;
 
+    public event Action? ShotRequested;
+
     public event Action? SettingsRequested;
 
     public event Action? TrainingRequested;
@@ -51,8 +60,9 @@ internal sealed class TrayController : IDisposable
 
     public void SetEnabled(bool enabled)
     {
-        _toggleItem.Text = enabled ? "Выключить перевод" : "Включить перевод";
-        _icon.Text = enabled ? "OverlayLingo — перевод включён" : "OverlayLingo — перевод выключен";
+        _toggleItem.Checked = enabled;
+        _toggleItem.Text = enabled ? "Живой перевод из поля — включён" : "Живой перевод из поля — выключен";
+        _icon.Text = enabled ? "OverlayLingo — живой перевод включён" : "OverlayLingo — живой перевод выключен";
     }
 
     public void Notify(string title, string message, ToolTipIcon icon = ToolTipIcon.Info)

@@ -11,7 +11,6 @@ internal sealed class SettingsWindow : Window
     private readonly CheckBox _enabled;
     private readonly CheckBox _autostart;
     private readonly CheckBox _browserAccessibility;
-    private readonly CheckBox _keyboardFallback;
     private readonly ComboBox _screenshotSource;
     private readonly ComboBox _fontFamily;
     private readonly ComboBox _fontSize;
@@ -39,6 +38,9 @@ internal sealed class SettingsWindow : Window
     private uint _key;
     private uint _reopenModifiers;
     private uint _reopenKey;
+    private uint _shotModifiers;
+    private uint _shotKey;
+    private readonly Button _shotHotkeyButton;
     private readonly Button _reopenHotkeyButton;
 
     public SettingsWindow(AppSettings settings)
@@ -48,27 +50,33 @@ internal sealed class SettingsWindow : Window
         _key = settings.HotkeyKey;
         _reopenModifiers = settings.ReopenHotkeyModifiers;
         _reopenKey = settings.ReopenHotkeyKey;
+        _shotModifiers = settings.ShotHotkeyModifiers;
+        _shotKey = settings.ShotHotkeyKey;
 
         Title = "OverlayLingo — настройки";
-        Width = 470;
+        Width = 980;
         SizeToContent = SizeToContent.Manual;
-        Height = Math.Max(420, Math.Min(1000, SystemParameters.WorkArea.Height * 0.9));
-        MinWidth = 400;
-        MinHeight = 360;
+        Height = Math.Max(480, Math.Min(820, SystemParameters.WorkArea.Height * 0.88));
+        MinWidth = 720;
+        MinHeight = 420;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
         ResizeMode = ResizeMode.CanResize;
         Background = new SolidColorBrush(Color.FromRgb(0xF7, 0xF8, 0xFA));
 
-        var panel = new StackPanel { Margin = new Thickness(20) };
+        var left = new StackPanel { Margin = new Thickness(20, 16, 12, 20) };
+        var right = new StackPanel { Margin = new Thickness(12, 16, 20, 20) };
 
         _enabled = new CheckBox
         {
-            Content = "Перевод включён",
+            Content = "Живой перевод из поля ввода",
             IsChecked = settings.Enabled,
             FontSize = 13,
             Margin = new Thickness(0, 0, 0, 16)
         };
-        panel.Children.Add(_enabled);
+        left.Children.Add(_enabled);
+        left.Children.Add(Hint(
+            "Снимок области с переводом работает всегда и от этой галочки не зависит. " +
+            "Она включает только перевод по мере набора текста в поле."));
 
         _autostart = new CheckBox
         {
@@ -77,33 +85,22 @@ internal sealed class SettingsWindow : Window
             FontSize = 13,
             Margin = new Thickness(0, 0, 0, 16)
         };
-        panel.Children.Add(_autostart);
+        left.Children.Add(_autostart);
 
         _browserAccessibility = new CheckBox
         {
-            Content = "Доступ к полям ввода в браузерах и Telegram",
+            Content = "Читать текст в браузерах и Telegram",
             IsChecked = settings.BrowserAccessibility,
             FontSize = 13,
             Margin = new Thickness(0, 0, 0, 4)
         };
-        panel.Children.Add(_browserAccessibility);
-        panel.Children.Add(Hint(
-            "Без этого Chrome, Telegram и подобные приложения скрывают текст поля. " +
-            "При выходе настройка возвращается как была."));
+        left.Children.Add(_browserAccessibility);
+        left.Children.Add(Hint(
+            "Chrome, Telegram и похожие программы не отдают текст поля напрямую. " +
+            "Приложение спрашивает его у самой Windows — только то поле, где стоит курсор."));
 
-        _keyboardFallback = new CheckBox
-        {
-            Content = "Перехват клавиатуры (запасной способ)",
-            IsChecked = settings.KeyboardFallback,
-            FontSize = 13,
-            Margin = new Thickness(0, 10, 0, 4)
-        };
-        panel.Children.Add(_keyboardFallback);
-        panel.Children.Add(Hint(
-            "Нужен там, где доступность не помогла. Помните: в этом режиме программа " +
-            "видит всё, что вы печатаете, включая пароли. Выключайте, если не нужно."));
 
-        panel.Children.Add(Caption("Горячая клавиша включения/выключения"));
+        left.Children.Add(Caption("Горячая клавиша включения/выключения"));
         _hotkeyButton = new Button
         {
             Content = HotkeyText(_modifiers, _key),
@@ -113,10 +110,10 @@ internal sealed class SettingsWindow : Window
             MinWidth = 170
         };
         _hotkeyButton.Click += (_, _) => StartCapture("toggle");
-        panel.Children.Add(_hotkeyButton);
-        panel.Children.Add(Hint("Нажмите кнопку и введите новую комбинацию."));
+        left.Children.Add(_hotkeyButton);
+        left.Children.Add(Hint("Нажмите кнопку и введите новую комбинацию."));
 
-        panel.Children.Add(Caption("Вызов последнего окна перевода"));
+        left.Children.Add(Caption("Вызов последнего окна перевода"));
         _reopenHotkeyButton = new Button
         {
             Content = HotkeyText(_reopenModifiers, _reopenKey),
@@ -126,15 +123,28 @@ internal sealed class SettingsWindow : Window
             MinWidth = 170
         };
         _reopenHotkeyButton.Click += (_, _) => StartCapture("reopen");
-        panel.Children.Add(_reopenHotkeyButton);
-        panel.Children.Add(Hint("Повторно показывает последний перевод после закрытия."));
+        left.Children.Add(_reopenHotkeyButton);
+        left.Children.Add(Hint("Повторно показывает последний перевод после закрытия."));
 
-        panel.Children.Add(Caption("Сервис перевода"));
+        left.Children.Add(Caption("Снимок с выделением области"));
+        _shotHotkeyButton = new Button
+        {
+            Content = HotkeyText(_shotModifiers, _shotKey),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            Padding = new Thickness(14, 6, 14, 6),
+            FontSize = 13,
+            MinWidth = 170
+        };
+        _shotHotkeyButton.Click += (_, _) => StartCapture("shot");
+        left.Children.Add(_shotHotkeyButton);
+        left.Children.Add(Hint("Обвести область экрана и получить перевод."));
+
+        left.Children.Add(Caption("Сервис перевода"));
         _provider = new ComboBox { FontSize = 13, Margin = new Thickness(0, 0, 0, 4) };
         _provider.Items.Add(new ComboBoxItem { Content = "Google (бесплатно, без ключа)", Tag = "google" });
         _provider.Items.Add(new ComboBoxItem { Content = "DeepL (нужен ключ API)", Tag = "deepl" });
         _provider.SelectedIndex = settings.Provider == "deepl" ? 1 : 0;
-        panel.Children.Add(_provider);
+        left.Children.Add(_provider);
 
         _deeplKey = new TextBox
         {
@@ -143,8 +153,8 @@ internal sealed class SettingsWindow : Window
             Padding = new Thickness(6, 4, 6, 4),
             Margin = new Thickness(0, 6, 0, 0)
         };
-        panel.Children.Add(_deeplKey);
-        panel.Children.Add(Hint("Ключ DeepL нужен только если выбран DeepL."));
+        left.Children.Add(_deeplKey);
+        left.Children.Add(Hint("Ключ DeepL нужен только если выбран DeepL."));
 
         var checkButton = new Button
         {
@@ -155,9 +165,19 @@ internal sealed class SettingsWindow : Window
             Margin = new Thickness(0, 8, 0, 0)
         };
         checkButton.Click += (_, _) => CheckConnection();
-        panel.Children.Add(checkButton);
+        left.Children.Add(checkButton);
 
-        panel.Children.Add(Caption("Язык текста на скриншоте"));
+        // Ответ проверки показываем сразу под кнопкой — иначе он уезжает вниз по прокрутке.
+        _status = new TextBlock
+        {
+            FontSize = 12,
+            Foreground = new SolidColorBrush(Color.FromRgb(0x8A, 0x6D, 0x00)),
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 8, 0, 0)
+        };
+        left.Children.Add(_status);
+
+        right.Children.Add(Caption("Язык текста на скриншоте"));
         _screenshotSource = new ComboBox { FontSize = 13, Margin = new Thickness(0, 0, 0, 4) };
         _screenshotSource.Items.Add(new ComboBoxItem { Content = "Определять автоматически", Tag = "auto" });
         _screenshotSource.Items.Add(new ComboBoxItem { Content = "Английский → русский", Tag = "en" });
@@ -170,10 +190,10 @@ internal sealed class SettingsWindow : Window
             _ => 0
         };
         _screenshotSource.SelectedIndex = selectedIndex;
-        panel.Children.Add(_screenshotSource);
-        panel.Children.Add(Hint("Если язык определён неверно — выберите его вручную."));
+        right.Children.Add(_screenshotSource);
+        right.Children.Add(Hint("Если язык определён неверно — выберите его вручную."));
 
-        panel.Children.Add(Caption("Оформление окна перевода"));
+        right.Children.Add(Caption("Оформление окна перевода"));
 
         _fontFamily = new ComboBox { FontSize = 13, Margin = new Thickness(0, 0, 0, 6) };
         foreach (string family in FontHelper.Names)
@@ -186,7 +206,7 @@ internal sealed class SettingsWindow : Window
         }
         _fontFamily.SelectedItem = settings.BubbleFont;
         _fontFamily.SelectionChanged += (_, _) => RefreshPreview();
-        panel.Children.Add(_fontFamily);
+        right.Children.Add(_fontFamily);
 
         _fontSize = new ComboBox
         {
@@ -204,19 +224,19 @@ internal sealed class SettingsWindow : Window
         _fontSize.SelectionChanged += (_, _) => RefreshPreview();
         _fontSize.LostFocus += (_, _) => RefreshPreview();
         _fontSize.KeyUp += (_, _) => RefreshPreview();
-        panel.Children.Add(_fontSize);
+        right.Children.Add(_fontSize);
 
         _fontColor = new ColorPicker(ParseColor(settings.BubbleFontColor, Colors.White));
         _fontColor.Changed += _ => RefreshPreview();
-        panel.Children.Add(LabeledRow("Цвет текста", _fontColor));
+        right.Children.Add(LabeledRow("Цвет текста", _fontColor));
 
         _bgColor = new ColorPicker(ParseColor(settings.BubbleBackground, Color.FromRgb(0x1B, 0x1D, 0x21)));
         _bgColor.Changed += _ => RefreshPreview();
-        panel.Children.Add(LabeledRow("Цвет фона", _bgColor));
+        right.Children.Add(LabeledRow("Цвет фона", _bgColor));
 
-        panel.Children.Add(Hint("Нажмите на образец цвета — откроется палитра."));
+        right.Children.Add(Hint("Нажмите на образец цвета — откроется палитра."));
 
-        panel.Children.Add(Caption("Предпросмотр"));
+        right.Children.Add(Caption("Предпросмотр"));
 
         _previewText = new TextBlock
         {
@@ -233,9 +253,9 @@ internal sealed class SettingsWindow : Window
             Margin = new Thickness(0, 0, 0, 6)
         };
 
-        panel.Children.Add(_previewFrame);
+        right.Children.Add(_previewFrame);
 
-        panel.Children.Add(Caption("Прозрачность фона"));
+        right.Children.Add(Caption("Прозрачность фона"));
 
         _opacity = new Slider
         {
@@ -247,7 +267,7 @@ internal sealed class SettingsWindow : Window
             TickFrequency = 0.05,
             IsSnapToTickEnabled = true
         };
-        panel.Children.Add(_opacity);
+        right.Children.Add(_opacity);
 
         _opacityText = new TextBlock
         {
@@ -260,9 +280,9 @@ internal sealed class SettingsWindow : Window
             _opacityText.Text = $"{_opacity.Value * 100:0}%";
             RefreshPreview();
         };
-        panel.Children.Add(_opacityText);
+        right.Children.Add(_opacityText);
 
-        panel.Children.Add(Caption("Скорость печати текста"));
+        right.Children.Add(Caption("Скорость печати текста"));
 
         _typing = new CheckBox
         {
@@ -271,7 +291,7 @@ internal sealed class SettingsWindow : Window
             FontSize = 13,
             Margin = new Thickness(0, 0, 0, 8)
         };
-        panel.Children.Add(_typing);
+        right.Children.Add(_typing);
 
         _speed = new Slider
         {
@@ -283,7 +303,7 @@ internal sealed class SettingsWindow : Window
             TickFrequency = 5,
             IsSnapToTickEnabled = true
         };
-        panel.Children.Add(_speed);
+        right.Children.Add(_speed);
 
         _speedText = new TextBlock
         {
@@ -292,10 +312,10 @@ internal sealed class SettingsWindow : Window
             Text = SpeedText(_speed.Value)
         };
         _speed.ValueChanged += (_, _) => _speedText.Text = SpeedText(_speed.Value);
-        panel.Children.Add(_speedText);
-        panel.Children.Add(Hint("0 — текст появляется сразу, без анимации."));
+        right.Children.Add(_speedText);
+        right.Children.Add(Hint("0 — текст появляется сразу, без анимации."));
 
-        panel.Children.Add(Caption("Звук печати"));
+        right.Children.Add(Caption("Звук печати"));
 
         _sound = new CheckBox
         {
@@ -304,7 +324,7 @@ internal sealed class SettingsWindow : Window
             FontSize = 13,
             Margin = new Thickness(0, 0, 0, 8)
         };
-        panel.Children.Add(_sound);
+        right.Children.Add(_sound);
 
         _soundVariant = new ComboBox { FontSize = 13, Margin = new Thickness(0, 0, 0, 6) };
 
@@ -324,7 +344,7 @@ internal sealed class SettingsWindow : Window
         }
 
         _soundVariant.SelectedIndex = soundIndex;
-        panel.Children.Add(_soundVariant);
+        right.Children.Add(_soundVariant);
 
         var playSound = new Button
         {
@@ -335,7 +355,7 @@ internal sealed class SettingsWindow : Window
             Margin = new Thickness(0, 2, 0, 0)
         };
         playSound.Click += (_, _) => _ = PlaySoundDemo();
-        panel.Children.Add(playSound);
+        right.Children.Add(playSound);
 
         _volume = new Slider
         {
@@ -348,7 +368,7 @@ internal sealed class SettingsWindow : Window
             TickFrequency = 0.05,
             IsSnapToTickEnabled = true
         };
-        panel.Children.Add(_volume);
+        right.Children.Add(_volume);
 
         _volumeText = new TextBlock
         {
@@ -357,7 +377,7 @@ internal sealed class SettingsWindow : Window
             Text = $"Громкость {_volume.Value * 100:0}%"
         };
         _volume.ValueChanged += (_, _) => _volumeText.Text = $"Громкость {_volume.Value * 100:0}%";
-        panel.Children.Add(_volumeText);
+        right.Children.Add(_volumeText);
 
         // Без анимации печати скорость и звук смысла не имеют.
         _typing.Checked += (_, _) => ApplyTypingState();
@@ -385,9 +405,9 @@ internal sealed class SettingsWindow : Window
                 _status.Text = "Позиция окна сброшена: снова встаёт рядом с выделением.";
             }
         };
-        panel.Children.Add(resetPosition);
+        right.Children.Add(resetPosition);
 
-        panel.Children.Add(Caption("Задержка перед отправкой, мс"));
+        left.Children.Add(Caption("Задержка перед отправкой, мс"));
         _debounce = new TextBox
         {
             Text = settings.DebounceMs.ToString(),
@@ -396,17 +416,8 @@ internal sealed class SettingsWindow : Window
             HorizontalAlignment = HorizontalAlignment.Left,
             Padding = new Thickness(6, 4, 6, 4)
         };
-        panel.Children.Add(_debounce);
-        panel.Children.Add(Hint("120–150 мс ощущается как мгновенно и экономит лимит запросов."));
-
-        _status = new TextBlock
-        {
-            FontSize = 12,
-            Foreground = new SolidColorBrush(Color.FromRgb(0x8A, 0x6D, 0x00)),
-            TextWrapping = TextWrapping.Wrap,
-            Margin = new Thickness(0, 14, 0, 0)
-        };
-        panel.Children.Add(_status);
+        left.Children.Add(_debounce);
+        left.Children.Add(Hint("120–150 мс ощущается как мгновенно и экономит лимит запросов."));
 
         var buttons = new StackPanel
         {
@@ -440,7 +451,7 @@ internal sealed class SettingsWindow : Window
         {
             VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
             HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
-            Content = panel,
+            Content = BuildColumns(left, right),
             Padding = new Thickness(0, 0, 6, 0)
         };
 
@@ -505,15 +516,22 @@ internal sealed class SettingsWindow : Window
             return;
         }
 
-                if (_capturingFor == "reopen")
+        switch (_capturingFor)
         {
-            _reopenModifiers = mods;
-            _reopenKey = (uint)KeyInterop.VirtualKeyFromKey(key);
-        }
-        else
-        {
-            _modifiers = mods;
-            _key = (uint)KeyInterop.VirtualKeyFromKey(key);
+            case "reopen":
+                _reopenModifiers = mods;
+                _reopenKey = (uint)KeyInterop.VirtualKeyFromKey(key);
+                break;
+
+            case "shot":
+                _shotModifiers = mods;
+                _shotKey = (uint)KeyInterop.VirtualKeyFromKey(key);
+                break;
+
+            default:
+                _modifiers = mods;
+                _key = (uint)KeyInterop.VirtualKeyFromKey(key);
+                break;
         }
 
         FinishCapture();
@@ -528,7 +546,12 @@ internal sealed class SettingsWindow : Window
 
     private Button ActiveHotkeyButton()
     {
-        return _capturingFor == "reopen" ? _reopenHotkeyButton : _hotkeyButton;
+        return _capturingFor switch
+        {
+            "reopen" => _reopenHotkeyButton,
+            "shot" => _shotHotkeyButton,
+            _ => _hotkeyButton
+        };
     }
 
     private void FinishCapture()
@@ -540,6 +563,11 @@ internal sealed class SettingsWindow : Window
             _reopenHotkeyButton.Content = HotkeyText(_reopenModifiers, _reopenKey);
         }
 
+        if (_shotHotkeyButton is not null)
+        {
+            _shotHotkeyButton.Content = HotkeyText(_shotModifiers, _shotKey);
+        }
+
         _capturingFor = null;
     }
 
@@ -548,12 +576,14 @@ internal sealed class SettingsWindow : Window
         _settings.Enabled = _enabled.IsChecked == true;
         _settings.StartWithWindows = _autostart.IsChecked == true;
         _settings.BrowserAccessibility = _browserAccessibility.IsChecked == true;
-        _settings.KeyboardFallback = _keyboardFallback.IsChecked == true;
+        _settings.KeyboardFallback = false;
         _settings.ScreenshotSource = (_screenshotSource.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "auto";
                 _settings.HotkeyModifiers = _modifiers;
         _settings.HotkeyKey = _key;
         _settings.ReopenHotkeyModifiers = _reopenModifiers;
         _settings.ReopenHotkeyKey = _reopenKey;
+        _settings.ShotHotkeyModifiers = _shotModifiers;
+        _settings.ShotHotkeyKey = _shotKey;
         _settings.Provider = (_provider.SelectedItem as ComboBoxItem)?.Tag?.ToString() ?? "google";
         _settings.DeeplKey = _deeplKey.Text.Trim();
 
@@ -591,6 +621,7 @@ internal sealed class SettingsWindow : Window
 
     private async void CheckConnection()
     {
+        _status.Foreground = new SolidColorBrush(Color.FromRgb(0x8A, 0x6D, 0x00));
         _status.Text = "Проверяю связь…";
 
         var probe = new AppSettings
@@ -601,15 +632,34 @@ internal sealed class SettingsWindow : Window
 
         try
         {
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(20));
             var translator = new Translator(probe);
-            string? result = await translator.TranslateAsync("Hello, world!", CancellationToken.None);
-            _status.Text = string.IsNullOrEmpty(result)
-                ? "Не удалось перевести. Проверьте интернет или ключ DeepL."
-                : "Работает: Hello, world! → " + result;
+            string? result = await translator.TranslateAsync("Hello, world!", timeout.Token);
+
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                _status.Foreground = new SolidColorBrush(Color.FromRgb(0xC6, 0x28, 0x28));
+                _status.Text = "Ответа нет: сервис перевода не вернул текст. Проверьте интернет.";
+                Log.Write("проверка связи: перевода нет");
+            }
+            else
+            {
+                _status.Foreground = new SolidColorBrush(Color.FromRgb(0x2E, 0x7D, 0x32));
+                _status.Text = "Связь есть: Hello, world! → " + result;
+                Log.Write("проверка связи: ок, " + result);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            _status.Foreground = new SolidColorBrush(Color.FromRgb(0xC6, 0x28, 0x28));
+            _status.Text = "Сервер не ответил за 20 секунд. Скорее всего нет интернета.";
+            Log.Write("проверка связи: таймаут");
         }
         catch (Exception ex)
         {
+            _status.Foreground = new SolidColorBrush(Color.FromRgb(0xC6, 0x28, 0x28));
             _status.Text = "Ошибка: " + ex.Message;
+            Log.Write("проверка связи: " + ex.Message);
         }
     }
 
@@ -784,6 +834,31 @@ internal sealed class SettingsWindow : Window
         {
             return fallback;
         }
+    }
+
+    /// <summary>Две колонки настроек: слева живые функции, справа оформление.</summary>
+    private static Grid BuildColumns(UIElement left, UIElement right)
+    {
+        var grid = new Grid();
+
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+        Grid.SetColumn(left, 0);
+        grid.Children.Add(left);
+
+        var separator = new Border
+        {
+            BorderBrush = new SolidColorBrush(Color.FromRgb(0xE1, 0xE5, 0xEC)),
+            BorderThickness = new Thickness(1, 0, 0, 0),
+            Margin = new Thickness(0, 12, 0, 12),
+            Child = right
+        };
+
+        Grid.SetColumn(separator, 1);
+        grid.Children.Add(separator);
+
+        return grid;
     }
 
     private static TextBlock Caption(string text)

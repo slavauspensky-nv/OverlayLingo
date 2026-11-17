@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Text.Json;
 
 namespace OverlayLingo;
@@ -17,6 +17,11 @@ internal sealed class AppSettings
     public uint ReopenHotkeyModifiers { get; set; } = 3;
 
     public uint ReopenHotkeyKey { get; set; } = 0x52;
+
+    /// <summary>Снимок с выделением области. По умолчанию Ctrl + Alt + S.</summary>
+    public uint ShotHotkeyModifiers { get; set; } = 3;
+
+    public uint ShotHotkeyKey { get; set; } = 0x53;
 
     public string Provider { get; set; } = "google";
 

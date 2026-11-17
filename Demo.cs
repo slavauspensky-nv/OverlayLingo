@@ -230,7 +230,7 @@ internal static class Demo
             return;
         }
 
-        const double width = 470;
+        double width = double.IsNaN(window.Width) ? 980 : window.Width;
         content.Measure(new Size(width, double.PositiveInfinity));
         content.Arrange(new Rect(0, 0, width, content.DesiredSize.Height));
 

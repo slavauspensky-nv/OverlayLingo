@@ -66,13 +66,14 @@ internal sealed class AppController
         _tray.DiagnosticsRequested += RunDiagnostics;
         _tray.AboutRequested += ShowAbout;
         _tray.ExitRequested += Shutdown;
+        _tray.ShotRequested += () => _screenshot?.Trigger();
         _hotkey.Pressed += Toggle;
 
         _screenshot = new ScreenshotController(_translator, _settings, message => _tray.Notify("OverlayLingo", message));
         _shotHotkey.Pressed += () => _screenshot.Trigger();
-        if (!_shotHotkey.TryRegister(Native.MOD_CONTROL | Native.MOD_ALT, 0x53))
+        if (!_shotHotkey.TryRegister(_settings.ShotHotkeyModifiers, _settings.ShotHotkeyKey))
         {
-            _tray.Notify("OverlayLingo", "Не удалось занять Ctrl+Alt+S для снимка с переводом.");
+            _tray.Notify("OverlayLingo", "Комбинация снимка области занята другой программой.");
         }
 
         _reopenHotkey.Pressed += () => _screenshot.ReopenLast();
@@ -697,6 +698,11 @@ internal sealed class AppController
         if (!_reopenHotkey.TryRegister(_settings.ReopenHotkeyModifiers, _settings.ReopenHotkeyKey))
         {
             _tray.Notify("OverlayLingo", "Комбинация повторного показа перевода занята другой программой.");
+        }
+
+        if (!_shotHotkey.TryRegister(_settings.ShotHotkeyModifiers, _settings.ShotHotkeyKey))
+        {
+            _tray.Notify("OverlayLingo", "Комбинация снимка области занята другой программой.");
         }
 
         if (!_enabled)
