@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>WordPeek</AssemblyName>
+    <RootNamespace>WordPeek</RootNamespace>
+    <Version>1.0.0</Version>
+    <Product>WordPeek</Product>
+    <AssemblyTitle>WordPeek</AssemblyTitle>
+    <Company>Vladislav Uspensky, Vyacheslav Uspensky</Company>
+    <Copyright>© 2026 Vladislav Uspensky, Vyacheslav Uspensky</Copyright>
+    <Description>Живой перевод текста из активного поля ввода</Description>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <PlatformTarget>x64</PlatformTarget>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <NoWarn>$(NoWarn);WFAC010</NoWarn>
+  </PropertyGroup>
+
+  <!-- WinForms SDK подмешивает свои using'и и они конфликтуют с WPF -->
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ocr.ps1" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="fonts\*.ttf" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="sounds\**\*.wav" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
